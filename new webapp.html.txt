@@ -1,0 +1,866 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+    <title>Migrant Worker Digital Health Record System</title>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+
+    <style>
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+        font-family:
+          Segoe UI,
+          Arial;
+      }
+
+      body {
+        background: radial-gradient(circle at top, #1e3a8a, #020617);
+        color: white;
+        min-height: 100vh;
+        animation: fadeIn 1s ease;
+      }
+
+      @keyframes fadeIn {
+        from {
+          opacity: 0;
+        }
+        to {
+          opacity: 1;
+        }
+      }
+
+      header {
+        background: rgba(255, 255, 255, 0.05);
+        backdrop-filter: blur(10px);
+        padding: 18px 60px;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+      }
+
+      header img {
+        width: 45px;
+      }
+
+      nav {
+        display: flex;
+        gap: 25px;
+      }
+
+      nav a {
+        color: white;
+        text-decoration: none;
+        font-weight: 500;
+        transition: 0.3s;
+      }
+
+      nav a:hover {
+        color: #38bdf8;
+      }
+
+      .hero {
+        height: 220px;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        text-align: center;
+        padding: 40px;
+        background: linear-gradient(135deg, #1e40af, #0ea5e9);
+      }
+
+      .hero h1 {
+        font-size: 42px;
+        margin-bottom: 15px;
+      }
+
+      .hero p {
+        max-width: 600px;
+        opacity: 0.85;
+      }
+
+      .stats {
+        display: flex;
+        justify-content: center;
+        gap: 40px;
+        padding: 40px;
+      }
+
+      .statBox {
+        background: rgba(255, 255, 255, 0.06);
+        padding: 25px;
+        border-radius: 12px;
+        text-align: center;
+        width: 200px;
+        transition: 0.3s;
+      }
+
+      .statBox:hover {
+        transform: translateY(-5px);
+      }
+
+      .statBox h3 {
+        font-size: 32px;
+        color: #fde047;
+      }
+
+      .features {
+        text-align: center;
+        padding: 60px 20px;
+      }
+
+      .featureGrid {
+        display: grid;
+        grid-template-columns: repeat(4, 1fr);
+        gap: 20px;
+        max-width: 1100px;
+        margin: auto;
+        margin-top: 40px;
+      }
+
+      .featureBox {
+        background: rgba(255, 255, 255, 0.05);
+        padding: 25px;
+        border-radius: 14px;
+        transition: 0.3s;
+      }
+
+      .featureBox:hover {
+        transform: translateY(-6px);
+        background: rgba(255, 255, 255, 0.09);
+      }
+
+      .container {
+        max-width: 1100px;
+        margin: auto;
+        padding: 40px;
+        animation: fadeIn 0.8s ease;
+      }
+
+      .dashboard {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 35px;
+      }
+
+      .card {
+        background: rgba(255, 255, 255, 0.06);
+        border: 1px solid rgba(255, 255, 255, 0.08);
+        backdrop-filter: blur(12px);
+        border-radius: 18px;
+        padding: 30px;
+        transition: 0.35s;
+      }
+
+      .card:hover {
+        transform: translateY(-6px);
+        box-shadow: 0 20px 40px rgba(0, 0, 0, 0.4);
+      }
+
+      .card img {
+        width: 100%;
+        border-radius: 12px;
+        margin-bottom: 15px;
+      }
+
+      label {
+        color: #fde047;
+        font-weight: bold;
+      }
+
+      input,
+      select {
+        width: 100%;
+        padding: 10px;
+        margin: 8px 0 15px;
+        border: none;
+        border-radius: 6px;
+      }
+
+      button {
+        padding: 12px 22px;
+        border: none;
+        border-radius: 10px;
+        background: linear-gradient(135deg, #38bdf8, #6366f1);
+        color: white;
+        font-weight: 600;
+        cursor: pointer;
+        transition: 0.3s;
+        margin-top: 10px;
+      }
+
+      button:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 8px 20px rgba(0, 0, 0, 0.4);
+      }
+
+      .workerCard {
+        background: white;
+        color: black;
+        padding: 20px;
+        margin: 16px 0;
+        border-radius: 12px;
+        box-shadow: 0 12px 25px rgba(0, 0, 0, 0.25);
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        transition: 0.3s;
+      }
+
+      .workerCard:hover {
+        transform: translateY(-4px);
+      }
+
+      .workerPhoto {
+        width: 70px;
+        height: 70px;
+        border-radius: 10px;
+        object-fit: cover;
+        margin-right: 10px;
+      }
+
+      .workerInfo h3 {
+        color: #1e40af;
+        margin-bottom: 6px;
+      }
+
+      .workerInfo p {
+        margin: 3px 0;
+        font-size: 14px;
+      }
+
+      .workerActions button {
+        margin-left: 8px;
+      }
+
+      .delete {
+        background: #e53935;
+      }
+
+      .preview {
+        width: 120px;
+        margin-top: 10px;
+        border-radius: 8px;
+      }
+
+      .detailsCard {
+        background: white;
+        color: black;
+        padding: 30px;
+        border-radius: 14px;
+        margin-top: 20px;
+        max-width: 700px;
+        margin-left: auto;
+        margin-right: auto;
+      }
+
+      .detailsGrid {
+        display: grid;
+        grid-template-columns: 180px 1fr;
+        gap: 25px;
+        align-items: start;
+      }
+
+      .detailsPhoto {
+        width: 180px;
+        height: 180px;
+        border-radius: 12px;
+        object-fit: cover;
+        box-shadow: 0 8px 20px rgba(0, 0, 0, 0.25);
+      }
+
+      .detailsBottom {
+        margin-top: 15px;
+        display: flex;
+        align-items: center;
+        gap: 20px;
+      }
+
+      .qrBox {
+        padding: 10px;
+        background: white;
+        display: inline-block;
+        border-radius: 8px;
+      }
+
+      .hidden {
+        display: none;
+      }
+
+      .infoSection {
+        max-width: 800px;
+        margin: 80px auto;
+        padding: 40px;
+        background: rgba(255, 255, 255, 0.05);
+        border-radius: 12px;
+        line-height: 1.7;
+      }
+
+      .infoSection h2,
+      .infoSection h3 {
+        color: #fde047;
+        text-align: center;
+        margin-bottom: 20px;
+      }
+
+      footer {
+        background: #020617;
+        padding: 40px;
+        text-align: center;
+        border-top: 1px solid rgba(255, 255, 255, 0.1);
+        margin-top: 80px;
+      }
+
+      footer a {
+        color: #38bdf8;
+        text-decoration: none;
+      }
+    </style>
+  </head>
+
+  <body>
+    <header>
+      <div style="display: flex; align-items: center; gap: 10px">
+        <img
+          src="https://www.eduska.com/assets/user_logo/148d0e17f3fb6629a471eef4db8fe106.jpg"
+        />
+        <h2>Migrant Health Record System</h2>
+      </div>
+
+      <nav>
+        <a href="#" onclick="openRegisterPage()">Register Worker</a>
+        <a href="#" onclick="openRecordsPage()">Worker Records</a>
+        <a href="#aboutSection">About System</a>
+      </nav>
+    </header>
+
+    <div class="hero">
+      <h1>Portable Digital Health Records</h1>
+      <p>Securely store and access migrant worker medical records anywhere.</p>
+    </div>
+
+    <div class="stats">
+      <div class="statBox">
+        <h3 id="totalWorkers">0</h3>
+        <p>Total Workers</p>
+      </div>
+
+      <div class="statBox">
+        <h3 id="totalConditions">0</h3>
+        <p>Health Records</p>
+      </div>
+    </div>
+
+    <section class="features">
+      <h2>Smart Healthcare Features</h2>
+
+      <div class="featureGrid">
+        <div class="featureBox">
+          <h3>Portable Records</h3>
+          <p>Access migrant worker health records anytime anywhere.</p>
+        </div>
+
+        <div class="featureBox">
+          <h3>Fast Medical Access</h3>
+          <p>Doctors can quickly view patient history.</p>
+        </div>
+
+        <div class="featureBox">
+          <h3>Secure Storage</h3>
+          <p>All records stored digitally and safely.</p>
+        </div>
+
+        <div class="featureBox">
+          <h3>Easy Monitoring</h3>
+          <p>Track worker health conditions across regions.</p>
+        </div>
+      </div>
+    </section>
+
+    <div id="registerPage" class="container">
+      <div class="dashboard">
+        <div class="card">
+          <img
+            src="https://images.unsplash.com/photo-1581594693702-fbdc51b2763b"
+          />
+
+          <h2>Add Worker Health Record</h2>
+
+          <label>Name</label>
+          <input id="name" />
+
+          <label>Age</label>
+          <input id="age" />
+
+          <label>Gender</label>
+          <select id="gender">
+            <option>Male</option>
+            <option>Female</option>
+            <option>Other</option>
+          </select>
+
+          <label>Contact Number</label>
+          <input id="contact" />
+
+          <label>Blood Group</label>
+          <input id="blood" />
+
+          <label>Location</label>
+          <input id="location" />
+
+          <label>Hospital Name</label>
+          <input id="hospital" />
+
+          <label>Assigned Doctor</label>
+          <input id="doctor" />
+
+          <label>Health Condition</label>
+          <input id="condition" />
+
+          <label>Patient Photo</label>
+          <input
+            type="file"
+            id="photo"
+            accept="image/*"
+            onchange="previewPhoto(event)"
+          />
+          <img id="preview" class="preview hidden" />
+
+          <button onclick="addRecord()">Save Record</button>
+
+          <br /><br />
+
+          <button onclick="openRecordsPage()">View Worker Records</button>
+        </div>
+
+        <div class="card">
+          <img
+            src="https://images.unsplash.com/photo-1584515933487-779824d29309"
+          />
+
+          <h3>Why This System Matters</h3>
+
+          <p>
+            Migrant workers often move between workplaces and regions which
+            causes loss of medical history. Without proper records doctors
+            cannot easily diagnose health problems or track treatments. This
+            digital platform allows clinics and healthcare providers to store
+            and access worker health records quickly.
+          </p>
+
+          <h3>The Concept of Seamless Mobility</h3>
+
+          <p>
+            At its core, a portable digital health record is a patient-centric
+            version of a medical file that can be accessed anytime, anywhere,
+            and on any device. Unlike traditional hospital-locked systems, PDHRs
+            move with you. Whether you are visiting a local clinic or seeking
+            emergency care while traveling abroad, your history of allergies,
+            past surgeries, and chronic conditions is available at your
+            fingertips. This mobility ensures that your care is consistent,
+            regardless of geographical or institutional boundaries.
+          </p>
+
+          <h3>Empowering Patient Autonomy</h3>
+
+          <p>
+            One of the most significant shifts driven by PDHRs is the move
+            toward patient empowerment. Historically, doctors were the
+            "gatekeepers" of medical data. With digital portability, you become
+            the primary owner of your health information. Having direct access
+            to lab results, imaging, and vaccination records allows you to take
+            a more active role in shared decision-making. When patients can see
+            their own data, they are more likely to adhere to treatment plans
+            and engage in preventative care.
+          </p>
+        </div>
+      </div>
+    </div>
+
+    <div id="recordsPage" class="container hidden">
+      <div class="card">
+        <h2>Worker Health Records</h2>
+
+        <button onclick="openRegisterPage()">← Back</button>
+
+        <div id="records"></div>
+      </div>
+    </div>
+
+    <div id="detailsPage" class="container hidden">
+      <div class="card">
+        <h2>Worker Health Record Details</h2>
+
+        <button onclick="openRecordsPage()">← Back to Records</button>
+
+        <div id="workerDetails"></div>
+      </div>
+    </div>
+
+    <section id="aboutSection" class="infoSection">
+      <h2>Challenges Faced by Migrant Workers</h2>
+
+      <p>
+        Migrant workers frequently move between workplaces and regions which
+        causes loss of medical history. Without proper records doctors cannot
+        easily diagnose health problems or track past treatments.
+      </p>
+
+      <h3>Digital Solution for Healthcare Access</h3>
+
+      <p>
+        This system allows clinics and healthcare providers to store health
+        information digitally so it can be accessed anytime.
+      </p>
+
+      <h3>DRK Institute of Science and Technology</h3>
+
+      <p>
+        This project demonstrates how technology can improve healthcare
+        accessibility for migrant workers.
+      </p>
+    </section>
+
+    <footer>
+      <h3>Helpful Health Resources</h3>
+
+      <p>
+        <a href="https://www.who.int" target="_blank"
+          >World Health Organization</a
+        >
+      </p>
+
+      <p>
+        <a href="https://www.mohfw.gov.in" target="_blank"
+          >Ministry of Health and Family Welfare</a
+        >
+      </p>
+
+      <p>
+        <a href="https://drkist.edu.in/" target="_blank"
+          >DRK Institute of Science and Technology</a
+        >
+      </p>
+
+      <p>
+        <a href="https://sdgs.un.org/goals/goal3" target="_blank"
+          >UN Sustainable Development Goal 3</a
+        >
+      </p>
+
+      <p style="margin-top: 20px; font-size: 14px; color: #ccc">
+        © 2026 Migrant Worker Digital Health Record System
+      </p>
+    </footer>
+
+    <script>
+      let records = JSON.parse(localStorage.getItem("healthRecords")) || [];
+      let photoBase64 = "";
+
+      function previewPhoto(event) {
+        let file = event.target.files[0];
+        let reader = new FileReader();
+
+        reader.onload = function (e) {
+          photoBase64 = e.target.result;
+          let img = document.getElementById("preview");
+          img.src = photoBase64;
+          img.classList.remove("hidden");
+        };
+
+        reader.readAsDataURL(file);
+      }
+
+      function saveStorage() {
+        localStorage.setItem("healthRecords", JSON.stringify(records));
+      }
+
+      function generateID() {
+        return "MW-" + Math.floor(100000 + Math.random() * 900000);
+      }
+
+      function updateStats() {
+        document.getElementById("totalWorkers").innerText = records.length;
+        document.getElementById("totalConditions").innerText = records.length;
+      }
+
+      function addRecord() {
+        let name = document.getElementById("name").value;
+        let age = document.getElementById("age").value;
+        let gender = document.getElementById("gender").value;
+        let contact = document.getElementById("contact").value;
+        let blood = document.getElementById("blood").value;
+        let location = document.getElementById("location").value;
+        let hospital = document.getElementById("hospital").value;
+        let doctor = document.getElementById("doctor").value;
+        let condition = document.getElementById("condition").value;
+
+        if (
+          name == "" ||
+          age == "" ||
+          gender == "" ||
+          contact == "" ||
+          blood == "" ||
+          location == "" ||
+          hospital == "" ||
+          doctor == "" ||
+          condition == ""
+        ) {
+          alert("Please fill all fields");
+          return;
+        }
+
+        let record = {
+          id: generateID(),
+          name,
+          age,
+          gender,
+          contact,
+          blood,
+          location,
+          hospital,
+          doctor,
+          condition,
+          photo: photoBase64,
+        };
+
+        records.push(record);
+
+        saveStorage();
+        updateStats();
+
+        alert("Worker record saved");
+
+        location.reload();
+      }
+
+      function displayRecords() {
+        let container = document.getElementById("records");
+        container.innerHTML = "";
+
+        records.forEach((r, index) => {
+          let div = document.createElement("div");
+          div.className = "workerCard";
+
+          div.innerHTML = `
+
+<div style="display:flex;align-items:center">
+
+<img src="${r.photo}" class="workerPhoto">
+
+<div class="workerInfo">
+
+<h3>${r.name}</h3>
+
+<p><b>Patient ID:</b> ${r.id}</p>
+<p><b>Age:</b> ${r.age}</p>
+<p><b>Gender:</b> ${r.gender}</p>
+<p><b>Blood:</b> ${r.blood}</p>
+<p><b>Doctor:</b> ${r.doctor}</p>
+
+</div>
+
+</div>
+
+<div class="workerActions">
+
+<button onclick="viewDetails(${index})">View</button>
+<button onclick="editRecord(${index})">Edit</button>
+<button class="delete" onclick="deleteRecord(${index})">Delete</button>
+
+</div>
+`;
+
+          container.appendChild(div);
+        });
+      }
+
+      function viewDetails(index) {
+        let worker = records[index];
+
+        document.getElementById("recordsPage").classList.add("hidden");
+        document.getElementById("detailsPage").classList.remove("hidden");
+
+        let container = document.getElementById("workerDetails");
+
+        container.innerHTML = `
+
+<div class="detailsCard">
+
+<div class="detailsGrid">
+
+<img src="${worker.photo}" class="detailsPhoto">
+
+<div>
+
+<h3>${worker.name}</h3>
+
+<p><b>Patient ID:</b> ${worker.id}</p>
+<p><b>Age:</b> ${worker.age}</p>
+<p><b>Gender:</b> ${worker.gender}</p>
+<p><b>Contact:</b> ${worker.contact}</p>
+<p><b>Blood Group:</b> ${worker.blood}</p>
+<p><b>Location:</b> ${worker.location}</p>
+<p><b>Hospital:</b> ${worker.hospital}</p>
+<p><b>Doctor:</b> ${worker.doctor}</p>
+<p><b>Health Condition:</b> ${worker.condition}</p>
+
+<div class="detailsBottom">
+
+<div class="qrBox" id="qr"></div>
+
+<button onclick="printCard('${worker.id}','${worker.name}','${worker.age}','${worker.gender}','${worker.contact}','${worker.blood}','${worker.location}','${worker.hospital}','${worker.doctor}','${worker.condition}','${worker.photo}')">
+Print Health Card
+</button>
+
+</div>
+
+</div>
+
+</div>
+
+</div>
+
+`;
+
+        let qrData = `
+Patient ID:${worker.id}
+Name:${worker.name}
+Blood:${worker.blood}
+Doctor:${worker.doctor}
+`;
+
+        new QRCode(document.getElementById("qr"), {
+          text: qrData,
+          width: 120,
+          height: 120,
+        });
+      }
+
+      function printCard(
+        id,
+        name,
+        age,
+        gender,
+        contact,
+        blood,
+        location,
+        hospital,
+        doctor,
+        condition,
+        photo,
+      ) {
+        let win = window.open("", "", "width=400,height=600");
+
+        let qrData = `ID:${id} Name:${name}`;
+
+        win.document.write(`
+
+<h2>Migrant Worker Health Card</h2>
+
+<img src="${photo}" style="width:120px;border-radius:10px">
+
+<p><b>ID:</b>${id}</p>
+<p><b>Name:</b>${name}</p>
+<p><b>Age:</b>${age}</p>
+<p><b>Gender:</b>${gender}</p>
+<p><b>Contact:</b>${contact}</p>
+<p><b>Blood:</b>${blood}</p>
+<p><b>Location:</b>${location}</p>
+<p><b>Hospital:</b>${hospital}</p>
+<p><b>Doctor:</b>${doctor}</p>
+<p><b>Condition:</b>${condition}</p>
+
+<div id="qrcode"></div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"><\/script>
+
+<script>
+
+new QRCode(document.getElementById("qrcode"),{
+text:"${qrData}",
+width:150,
+height:150
+});
+
+window.print();
+
+<\/script>
+
+`);
+      }
+
+      function deleteRecord(index) {
+        if (confirm("Delete this record?")) {
+          records.splice(index, 1);
+          saveStorage();
+          updateStats();
+          displayRecords();
+        }
+      }
+
+      function editRecord(index) {
+        let r = records[index];
+
+        let name = prompt("Edit Name", r.name);
+        let age = prompt("Edit Age", r.age);
+        let gender = prompt("Edit Gender", r.gender);
+        let contact = prompt("Edit Contact", r.contact);
+        let blood = prompt("Edit Blood Group", r.blood);
+        let location = prompt("Edit Location", r.location);
+        let hospital = prompt("Edit Hospital", r.hospital);
+        let doctor = prompt("Edit Doctor", r.doctor);
+        let condition = prompt("Edit Condition", r.condition);
+
+        if (
+          name &&
+          age &&
+          gender &&
+          contact &&
+          blood &&
+          location &&
+          hospital &&
+          doctor &&
+          condition
+        ) {
+          records[index] = {
+            ...r,
+            name,
+            age,
+            gender,
+            contact,
+            blood,
+            location,
+            hospital,
+            doctor,
+            condition,
+          };
+
+          saveStorage();
+          displayRecords();
+        }
+      }
+
+      function openRecordsPage() {
+        document.getElementById("registerPage").classList.add("hidden");
+        document.getElementById("detailsPage").classList.add("hidden");
+        document.getElementById("recordsPage").classList.remove("hidden");
+        displayRecords();
+      }
+
+      function openRegisterPage() {
+        document.getElementById("recordsPage").classList.add("hidden");
+        document.getElementById("detailsPage").classList.add("hidden");
+        document.getElementById("registerPage").classList.remove("hidden");
+      }
+
+      updateStats();
+    </script>
+  </body>
+</html>
